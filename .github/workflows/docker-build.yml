@@ -1,6 +1,5 @@
 name: Build and Push Docker Image
 
-# Trigger the workflow on push to the main branch and pull requests
 on:
   push:
     branches:
@@ -12,23 +11,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     permissions:
-      packages: write  # Allow the workflow to push to GitHub Container Registry
+      packages: write  # Allow pushing to GitHub Container Registry
       contents: read   # Default read access to repository contents
 
     steps:
-      # Step 1: Checkout the code from the repository
-      - name: Checkout code
+      # Step 1: Check out the code
+      - name: Check out the repository
         uses: actions/checkout@v3
 
-      # Step 2: Log in to GitHub Container Registry using the built-in GITHUB_TOKEN
+      # Step 2: Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Step 3: Build the Docker image
+      # Step 3: Build the Docker image from the `app` directory
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/loadbalancer-test:latest .
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/loadbalancer-test:latest -f ./app/Dockerfile ./app
 
       # Step 4: Push the Docker image to GitHub Container Registry
       - name: Push Docker image
