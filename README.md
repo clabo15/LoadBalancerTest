@@ -180,7 +180,7 @@ networks:
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository_url>
+   git clone [<repository_url>](https://github.com/clabo15/LoadBalancerTest.git)
    cd LoadBalancerTest
    ```
 
